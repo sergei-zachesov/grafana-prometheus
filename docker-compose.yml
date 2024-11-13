@@ -1,0 +1,24 @@
+services:
+  grafana:
+    build: './monitoring/config/grafana'
+    container_name: grafana
+    ports:
+      - "23000:3000"
+    restart: always
+    volumes:
+      - ./monitoring/grafana:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    ports:
+      - "29090:9090"
+    restart: always
+    volumes:
+      - ./monitoring/config/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--log.level=debug'
